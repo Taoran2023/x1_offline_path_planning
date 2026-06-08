@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>stub_swarm_data</name>
+  <version>0.0.1</version>
+  <description>Offline single-robot stub replacing the multi-robot swarm_data package</description>
+  <maintainer email="noop@noop.com">stub</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>geometry_msgs</depend>
+  <depend>stub_exp_comm_msgs</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

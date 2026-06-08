@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>frontier_grid</name>
+  <version>0.0.1</version>
+  <description>Frontier detection and viewpoint sampling</description>
+  <maintainer email="qianlidong@mail.nankai.edu.cn">CharlieDog</maintainer>
+  <license>TODO</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>rclcpp</depend>
+  <depend>std_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>visualization_msgs</depend>
+  <depend>pcl_conversions</depend>
+  <depend>cv_bridge</depend>
+  <depend>block_map</depend>
+  <depend>lowres_map</depend>
+  <depend>stub_swarm_data</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

@@ -1,0 +1,175 @@
+test_map:
+  ros__parameters:
+
+    # ─────────────────────────────────────────────
+    # Global map bounds (shared by BlockMap and LowResMap)
+    # ─────────────────────────────────────────────
+    Exp.minX: -100.0
+    Exp.maxX:  100.0
+    Exp.minY: -150.0
+    Exp.maxY:  20.0
+    Exp.minZ: -5.0
+    Exp.maxZ:  20.0
+
+    Exp.drone_num: 1
+    Exp.robot_sizeX: 0.5
+    Exp.robot_sizeY: 0.5
+    Exp.robot_sizeZ: 0.3
+
+    # ─────────────────────────────────────────────
+    # BlockMap
+    # ─────────────────────────────────────────────
+
+    # Map bounds (must match Exp.*; BlockMap reads its own copy independently)
+    block_map.minX: -100.0
+    block_map.maxX:  100.0
+    block_map.minY: -150.0
+    block_map.maxY:  20.0
+    block_map.minZ: -5.0
+    block_map.maxZ:  20.0
+
+    # Voxel resolution and block size
+    block_map.resolution:   0.25       # voxel edge length [m]
+    block_map.blockX:       10         # voxel count per block along x
+    block_map.blockY:       10
+    block_map.blockZ:       10
+
+    # Sensor
+    block_map.sensor_max_range: 30.0  # only used in online mode; ignored offline
+    block_map.depth:            false # use point cloud (false) or depth image (true)
+    block_map.depth_step:       2
+
+    # Log-odds thresholds
+    block_map.occ_max:       0.9      # voxel max log-odds (occupied upper bound)
+    block_map.occ_min:       0.1      # voxel min log-odds (free lower bound)
+    block_map.pro_hit_occ:   0.7      # increment on hit
+    block_map.pro_miss_free: 0.4      # decrement on miss
+
+    # Visualization
+    block_map.show_freq:  1.0         # BlockMap internal timer refresh rate [Hz]
+    block_map.show_block: false       # disable BlockMap's built-in MarkerArray (we publish our own)
+    block_map.vis_mode:   false
+
+    # Camera-to-body extrinsics (irrelevant offline; keep defaults)
+    block_map.CamtoBody_Quater_x: 0.0
+    block_map.CamtoBody_Quater_y: 0.0
+    block_map.CamtoBody_Quater_z: 0.0
+    block_map.CamtoBody_Quater_w: 1.0
+    block_map.CamtoBody_x: 0.0
+    block_map.CamtoBody_y: 0.0
+    block_map.CamtoBody_z: 0.0
+
+    # Update rate (online mode)
+    block_map.update_freq:  5.0
+    block_map.occ_duration:     1.0
+    block_map.unknown_duration: 0.5
+
+    # Swarm (all disabled in offline single-robot mode; keep defaults)
+    block_map.min_finish_t:     30.0
+    block_map.swarm_pub_thresh: 0.95
+    block_map.swarm_tol:        0.2
+    block_map.swarm_send_delay: 0.2
+    block_map.bline_occ_range:  0.7
+
+    # Robot visualization size (used by Swarm; irrelevant offline)
+    block_map.RobotVisX: 0.5
+    block_map.RobotVisY: 0.5
+    block_map.RobotVisZ: 0.3
+
+    # Volume statistics (not needed offline)
+    block_map.statistic_v: false
+
+    # Height color: low→high = blue→cyan→green→yellow→red (range 0-255)
+    block_map.HeightcolorR: [0.0,   0.0,   0.0,   255.0, 255.0]
+    block_map.HeightcolorG: [0.0,   255.0, 255.0, 255.0, 0.0]
+    block_map.HeightcolorB: [255.0, 255.0, 0.0,   0.0,   0.0]
+
+    # Traversability computation
+    block_map.traversability_compute: true
+    block_map.traversability_vis:     false
+    block_map.normal_smooth_enable:       true
+    block_map.normal_smooth_iterations:   1
+    block_map.normal_smooth_radius_xy:    1
+    block_map.normal_smooth_half_z:       2
+    block_map.normal_smooth_sigma_s:      0.06
+    block_map.normal_smooth_sigma_ang_deg: 20.0
+    block_map.normal_smooth_sigma_r:      0.02
+    block_map.normal_smooth_n_ref:        5
+    block_map.trav_min_pts:       5
+    block_map.trav_slope_max_deg: 60.0
+    block_map.trav_rough_max:     0.10
+    block_map.trav_w_slope:       0.9
+    block_map.trav_w_rough:       0.1
+
+    # ─────────────────────────────────────────────
+    # LowResMap
+    # ─────────────────────────────────────────────
+    LowResMap.resolution:       0.5     # matches BlockMap voxel resolution [m]
+    LowResMap.node_x:           0.5     # LR node target size (actual = node_size * resolution)
+    LowResMap.node_y:           0.5
+    LowResMap.node_z:           0.5
+    LowResMap.blockX:           3
+    LowResMap.blockY:           3
+    LowResMap.blockZ:           3
+    LowResMap.localgraph_sizex: 14.0
+    LowResMap.localgraph_sizey: 14.0
+    LowResMap.localgraph_sizez:  8.0
+    LowResMap.lambda_heu:       1.5
+    LowResMap.seg_length:       3.0
+    LowResMap.prune_seg_length: 3.0
+    LowResMap.corridor_expX:    1
+    LowResMap.corridor_expY:    1
+    LowResMap.corridor_expZ:    1
+    LowResMap.showmap:          false
+    LowResMap.debug:            false
+    LowResMap.show_dtg:         false
+
+    # Offline LowRes initialization parameters
+    LowResMap.ground_thr:         0.8   # traversability >= this value → GROUND
+    LowResMap.min_aero_height:    1.5   # world z >= this value to be AERO (minimum flight height)
+    LowResMap.max_aero_height:    5.0   # world z <= this value and score=0 → AERO (maximum flight height)
+    LowResMap.topo_spacing_thr:   3.0   # minimum spacing between TopoNodes [m]
+    LowResMap.topo_sample_prob:   0.3   # TopoNode sampling probability
+    LowResMap.topo_max_range:   20.0   # max Dijkstra expansion distance for same-tag nodes during topo graph construction [m]
+
+    # ─────────────────────────────────────────────
+    # PCD preprocessing
+    # ─────────────────────────────────────────────
+    pcd.yaw_deg: 0.0                  # PCD rotation angle around Z axis [deg], used to align coordinate frames
+
+    # ─────────────────────────────────────────────
+    # Visualization debug
+    # ─────────────────────────────────────────────
+    viz.debug_path: true              # true: show the Dijkstra path stored in the edge; false: draw a direct line
+
+    # ─────────────────────────────────────────────
+    # Planning targets (world coordinates [x, y, z])
+    # ─────────────────────────────────────────────
+    target1: [20.0,  0.0,  -1.0]      # start / shared origin
+    target2: [15.0,  -120.0,  1.0]      # G1 goal
+    target3: [-50.0,  -90.0,  1.0]      # M4 goal
+
+    # ─────────────────────────────────────────────
+    # Step-by-step debug switches (false = skip this step and its viz output)
+    # Dependency chain: blockmap → voxels / traversability / lowres → targets / lrtags / topograph
+    # ─────────────────────────────────────────────
+    dbg.raw_cloud:     true   # downsampled point cloud → /viz/raw_cloud
+    dbg.blockmap:      true   # BlockMap insert + FillUnknownFree
+    dbg.patch_trav:    true   # BFS patch for traversability score in sparse regions
+    patch_trav.fill_radius: 1 # patch neighborhood radius [voxels]
+    dbg.voxels:        true   # occupied/free voxels → /viz/occupied_voxels /viz/free_voxels
+    dbg.traversability: true  # traversability surface → /viz/traversability
+    dbg.lowres:        true   # LowResMap init + BuildTopoModAware
+    dbg.targets:       true   # InsertQueryPoint target1/2/3 → /viz/query_points
+    dbg.lrtags:        true   # LowRes tag distribution → /viz/lr_tags
+    dbg.topograph:     true   # topo graph nodes+edges → /viz/topo_graph
+    dbg.plantest:      true   # Phase 2b/2c: build three search trees + separation-point solve (depends on targets)
+
+    # ─────────────────────────────────────────────
+    # TreeSearch agent cost parameters
+    # ─────────────────────────────────────────────
+    agent.m4g1.cost_g:        1.5   # shared-segment ground cost multiplier (GROUND_ONLY)
+    agent.g1.cost_g:          1.0   # G1 ground cost multiplier (GROUND_ONLY)
+    agent.m4.cost_g:          1.2   # M4 ground cost multiplier (DUAL_MODE)
+    agent.m4.cost_a:          0.8   # M4 aerial cost multiplier (DUAL_MODE)
+    agent.m4.transform_cost:  5.0   # M4 takeoff/landing fixed penalty (EDGE_CROSS)

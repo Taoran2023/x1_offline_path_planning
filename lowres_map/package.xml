@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>lowres_map</name>
+  <version>0.0.1</version>
+  <description>Low-resolution planning grid with BimodelA* path search</description>
+  <maintainer email="charlie_dog@163.com">CharlieDog</maintainer>
+  <license>TODO</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>rclcpp</depend>
+  <depend>visualization_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>block_map</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

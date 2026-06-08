@@ -1,0 +1,13 @@
+# Build artifacts (if any leak into src/ via colcon symlink-install)
+build/
+install/
+log/
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+
+# Python
+__pycache__/
+*.pyc

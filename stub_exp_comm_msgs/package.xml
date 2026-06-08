@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>stub_exp_comm_msgs</name>
+  <version>0.0.1</version>
+  <description>Offline stub replacing multi-robot exp_comm_msgs (header-only plain C++ structs)</description>
+  <maintainer email="noop@noop.com">stub</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

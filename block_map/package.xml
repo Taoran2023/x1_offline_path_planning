@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>block_map</name>
+  <version>0.0.1</version>
+  <description>3D occupancy block map with traversability analysis</description>
+  <maintainer email="qianlidong@mail.nankai.edu.cn">CharlieDog</maintainer>
+  <license>TODO</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>rclcpp</depend>
+  <depend>std_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>visualization_msgs</depend>
+  <depend>pcl_conversions</depend>
+  <depend>cv_bridge</depend>
+  <depend>stub_swarm_data</depend>
+  <depend>stub_exp_comm_msgs</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
