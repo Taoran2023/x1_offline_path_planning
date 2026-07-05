@@ -6,7 +6,7 @@ from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
 PKG_SHARE = get_package_share_directory('path_planning')
-CONFIG    = os.path.join(PKG_SHARE, 'config', 'caltech_slam.yaml')
+CONFIG    = os.path.join(PKG_SHARE, 'config', 'caltech_scan.yaml')
 # CONFIG    = os.path.join(PKG_SHARE, 'config', 'mapping.yaml')
 RVIZ_CFG  = os.path.join(PKG_SHARE, 'rviz',   'rviz.rviz')
 

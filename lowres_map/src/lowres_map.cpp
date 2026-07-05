@@ -1879,10 +1879,10 @@ void LowResMap::OfflineBuildTopoModAware() {
         topo_adj_[b].push_back({b, a, cost, etag, gate, path_ba});
     };
 
-    // 6-connectivity offsets
-    const int DX[6] = {1,-1,0,0,0,0};
-    const int DY[6] = {0,0,1,-1,0,0};
-    const int DZ[6] = {0,0,0,0,1,-1};
+    // 26-connectivity offsets (all {-1,0,1}^3 except origin)
+    const int DX[26] = {-1,-1,-1,-1,-1,-1,-1,-1,-1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+    const int DY[26] = {-1,-1,-1, 0, 0, 0, 1, 1, 1,-1,-1,-1, 0, 0, 1, 1, 1,-1,-1,-1, 0, 0, 0, 1, 1, 1};
+    const int DZ[26] = {-1, 0, 1,-1, 0, 1,-1, 0, 1,-1, 0, 1,-1, 1,-1, 0, 1,-1, 0, 1,-1, 0, 1,-1, 0, 1};
 
     // Dijkstra through nodes of tag_filter only.
     // Returns: hits = { topo_id → sch_node } for all reached TopoNodes.
@@ -1908,7 +1908,7 @@ void LowResMap::OfflineBuildTopoModAware() {
             if (tit != node_topo_id_.end())
                 hits[tit->second] = cur;
 
-            for (int i = 0; i < 6; i++) {
+            for (int i = 0; i < 26; i++) {
                 Eigen::Vector3i np = cur->pos_ + Eigen::Vector3i(DX[i], DY[i], DZ[i]);
                 if (!InsideMap(np)) continue;
                 auto lr = GetNode(IdtoPos(np));
@@ -1978,7 +1978,7 @@ void LowResMap::OfflineBuildTopoModAware() {
                 }
             }
 
-            for (int i = 0; i < 6; i++) {
+            for (int i = 0; i < 26; i++) {
                 Eigen::Vector3i np = cur->pos_ + Eigen::Vector3i(DX[i], DY[i], DZ[i]);
                 if (!InsideMap(np)) continue;
                 auto lr = GetNode(IdtoPos(np));
@@ -2152,9 +2152,10 @@ uint32_t LowResMap::InsertQueryPoint(const Eigen::Vector3d& pos, T_TAG tag,
     auto gid = [&](const Eigen::Vector3i& p) -> int {
         return p.z()*v_n_(1) + p.y()*voxel_num_(0) + p.x();
     };
-    const int DX[6] = {1,-1,0,0,0,0};
-    const int DY[6] = {0,0,1,-1,0,0};
-    const int DZ[6] = {0,0,0,0,1,-1};
+    // 26-connectivity offsets (all {-1,0,1}^3 except origin)
+    const int DX[26] = {-1,-1,-1,-1,-1,-1,-1,-1,-1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+    const int DY[26] = {-1,-1,-1, 0, 0, 0, 1, 1, 1,-1,-1,-1, 0, 0, 1, 1, 1,-1,-1,-1, 0, 0, 0, 1, 1, 1};
+    const int DZ[26] = {-1, 0, 1,-1, 0, 1,-1, 0, 1,-1, 0, 1,-1, 1,-1, 0, 1,-1, 0, 1,-1, 0, 1,-1, 0, 1};
 
     auto extract_path = [&](const shared_ptr<sch_node>& leaf) {
         std::vector<Eigen::Vector3d> path;
@@ -2229,7 +2230,7 @@ uint32_t LowResMap::InsertQueryPoint(const Eigen::Vector3d& pos, T_TAG tag,
             if (tit != node_topo_id_.end() && tit->second != qid)
                 hits[tit->second] = cur;
 
-            for (int i = 0; i < 6; i++) {
+            for (int i = 0; i < 26; i++) {
                 Eigen::Vector3i np = cur->pos_ + Eigen::Vector3i(DX[i], DY[i], DZ[i]);
                 if (!InsideMap(np)) continue;
                 auto lrn = GetNode(IdtoPos(np));
