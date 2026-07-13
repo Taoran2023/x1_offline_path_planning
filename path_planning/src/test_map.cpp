@@ -10,6 +10,8 @@
 #include <path_planning/viz.h>
 #include <path_planning/topo_planner.h>
 #include <block_map/mapping_struct.h>
+#include <filesystem>
+#include <fstream>
 
 using namespace std::chrono_literals;
 
@@ -50,6 +52,10 @@ public:
         // ── Path stitching prune window ──────────────────────────────
         stitch_prune_len_ = declare_parameter<double>("plan.stitch_prune_length", 10.0);
 
+        // ── Path export (CSV dump of g1m4/g1/m4 AgentPaths) ──────────
+        // empty = disabled; set to a directory to write path_g1m4.csv, path_g1.csv, path_m4.csv there
+        export_dir_ = declare_parameter<std::string>("plan.export_dir", "");
+
         // ── Agent cost parameters ────────────────────────────────────
         agent_m4g1_cost_g_  = declare_parameter<double>("agent.m4g1.cost_g",       1.5);
         agent_g1_cost_g_    = declare_parameter<double>("agent.g1.cost_g",         1.0);
@@ -77,6 +83,24 @@ private:
     // ── Step label (unified log format) ──────────────────────────────
     void StepSkip(const char* name) {
         RCLCPP_INFO(get_logger(), "[SKIP] %s", name);
+    }
+
+    // Dump one AgentPath to CSV: seg_idx,tag,x,y,z (one row per waypoint)
+    void ExportPathCsv(const std::string& filepath, const path_planning::AgentPath& path) {
+        std::ofstream f(filepath);
+        if (!f) {
+            RCLCPP_WARN(get_logger(), "[export] failed to open %s for writing", filepath.c_str());
+            return;
+        }
+        static const char* kTagNames[3] = {"GROUND", "AERIAL", "TRANS"};
+        f << "seg_idx,tag,x,y,z\n";
+        for (size_t i = 0; i < path.size(); i++) {
+            const auto& [tag, pts] = path[i];
+            for (const auto& p : pts) {
+                f << i << "," << kTagNames[tag] << "," << p.x() << "," << p.y() << "," << p.z() << "\n";
+            }
+        }
+        RCLCPP_INFO(get_logger(), "[export] wrote %zu segs to %s", path.size(), filepath.c_str());
     }
 
     // ── Phase 2b/2c: build three search trees + solve separation point ──
@@ -149,6 +173,13 @@ private:
             RCLCPP_INFO(get_logger(),
                 "[plantest] path: shared=%zu segs  g1=%zu segs  m4=%zu segs",
                 path_shared_.size(), path_g1_.size(), path_m4_.size());
+
+            if (!export_dir_.empty()) {
+                std::filesystem::create_directories(export_dir_);
+                ExportPathCsv(export_dir_ + "/path_g1m4.csv", path_shared_);
+                ExportPathCsv(export_dir_ + "/path_g1.csv",   path_g1_);
+                ExportPathCsv(export_dir_ + "/path_m4.csv",   path_m4_);
+            }
         } else {
             RCLCPP_WARN(get_logger(), "[plantest] no overlap nodes — the three trees do not intersect; check map connectivity");
         }
@@ -382,6 +413,9 @@ private:
 
     // Path stitching prune window
     double stitch_prune_len_   = 10.0;
+
+    // Path export (CSV dump); empty = disabled
+    std::string export_dir_;
 
     // Agent cost parameters
     double agent_m4g1_cost_g_  = 1.5;
