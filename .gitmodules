@@ -1,0 +1,3 @@
+[submodule "libs/gcs_trajectory_optimizer"]
+	path = libs/gcs_trajectory_optimizer
+	url = git@github.com:deonfpetrizzo/gcs-trajectory-optimizer.git
